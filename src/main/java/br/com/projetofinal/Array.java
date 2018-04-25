@@ -1,147 +1,53 @@
 package br.com.projetofinal;
 
+import br.com.projetofinal.model.Connections;
+import br.com.projetofinal.repository.ConnectionsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+import static java.lang.Math.toIntExact;
+
 public class Array {
 
-    int weight[][] =   {
-            /*1*/ {2	,8},
-            /*2*/ {1	,3},
-            /*3*/ {2	,4},
-            /*4*/ {3	,5},
-            /*5*/ {4	,6,	9,	10},
-            /*6*/ {5	,7,	9,	10},
-            /*7*/ {6	,10,	11},
-            /*8*/ {1	,12},
-            /*9*/ {5	,6,	10,	17,	18},
-            /*10*/ {5	,6,	7,	9,	17,	18},
-            /*11*/ {7	,19},
-            /*12*/ {8	,20,	13},
-            /*13*/ {12	,14},
-            /*14*/ {13	,15},
-            /*15*/ {14	,16},
-            /*16*/ {15	,17},
-            /*17*/ {16	,18,9,	10,	18},
-            /*18*/ {9	,10,17,	26,	27},
-            /*19*/ {11	,29	,28},
-            /*20*/ {12	,30, 21},
-            /*21*/ {20	,22},
-            /*22*/ {21	,23},
-            /*23*/ {22	,24},
-            /*24*/ {23	,25},
-            /*25*/ {24	,26},
-            /*26*/ {25	,27},
-            /*27*/ {26	,18,	28, 31},
-            {27	,29,	19},
-            {19	,28},
-            /*30*/ {20	,32},
-            {27	,39},
-            {30	,40, 33},
-            {32	,34},
-            {33	,35},
-            {34	,36},
-            {35	,37},
-            {36	,38},
-            {37	,39},
-            {31	,41, 38},
-            /*40*/{32	,42},
-            {39	,49},
-            {40	,50, 43},
-            {42	,44},
-            {43	,45},
-            {44	,46},
-            {45	,47},
-            {46	,48},
-            {47	,49},
-            {41	,51, 48},
-            /*50*/{42	,52},
-            {49	,59},
-            {50	,60, 53},
-            {52	,54},
-            {53	,55},
-            {54	,56},
-            {55	,57},
-            {56	,58},
-            {57	,59},
-            {51	,61, 58},
-            /*60*/{52	,62},
-            {59	,69},
-            {60	,70, 63},
-            {62	,64},
-            {63	,65},
-            {64	,66},
-            {65	,67},
-            {66	,68},
-            {67	,69},
-            {61	,71, 68},
-            /*70*/{62	,72},
-            {69	,79},
-            {70	,80, 73},
-            {72	,74},
-            {73	,75},
-            {74	,76},
-            {75	,77},
-            {76	,78},
-            {77	,79},
-            {71	,81, 78},
-            /*80*/{72	,82},
-            {79	,89},
-            {80	,90, 83},
-            {82	,84},
-            {83	,85},
-            {84	,86},
-            {85	,87},
-            {86	,88},
-            {87	,89},
-            {81	,91,88},
-            /*90*/{82	,92},
-            {89	,99},
-            {90	,100,	93},
-            {92	,100,	101	,94},
-            {93	,95},
-            {94	,96},
-            {95	,97},
-            {96	,98},
-            {97	,99},
-            {91	,102, 98},
-            /*100*/{92	,93,	103	,101,	104},
-            {92	,93,	100,	103	,104},
-            {99	,110,	111},
-            {100,	101	,104,	113},
-            {100,	101,	103	,113,105},
-            {104,	106},
-            {105,	114	,120	,107},
-            {106,	108},
-            {107,	115,	109},
-            {108,	110},
-            {109,	111},
-            {102,	110	,116	,117	,112},
-            {111,	118},
-            {104,	103,	119},
-            {106,	120},
-            {108,	121},
-            {110,	111	,123	,117	,124},
-            {110,	111	,116	,123	,124},
-            {112,	125},
-            {113,	120},
-            {119,	114	,121},
-            {115,	120},
-            {115,	121	,116,	123},
-            {122,	116,	117	,124},
-            {116,	117,	123	,125},
-            {118,	124}
-    };
+    List<Connections> connectionsList;
 
     public static final int INF=Integer.MAX_VALUE;
 
+    /*Contrutor seta toda a entidade Connections no List*/
+    public Array(ConnectionsRepository connections) {
 
-    public int readArray(Integer a, Integer b){
-        if(a == b)
-            return 0;
+        /*No construtor eu pego as conexões no banco e jogo na connectionList*/
+        List<Connections> list = new ArrayList<>();
 
-        for(int i = 0; i < weight[a].length; i++){
-            if(weight[a][i]-1 == b){
-                return 1;
+        Iterable iterable = connections.findAll();
+
+        /*Pegar o Iterable e transformar em ArrayList*/
+        if(iterable instanceof List) {
+            list = (List<Connections>) iterable;
+        }else{
+            for(Object c: iterable) {
+                list.add( (Connections) c);
             }
         }
+
+        this.connectionsList = list;
+    }
+
+    /*Retorna 1 se no ponto a existir o ponto b*/
+    public int readArray(Integer a, Integer b){
+
+        if(a == b)
+            return 0;
+        /*a chega com a posição no dijskstra então não diminuo pois o get também busca pela posição (que é PONTO-1)*/
+        /*b chega com a posição no dijskstra que é um a menos que no banco, por isso somo, para que ele pegue o PONTO correto*/
+        b++;
+        if(this.connectionsList.get(a).getConnections().contains("," + b + ","))
+            return 1;
+
         return this.INF;
     };
 }
