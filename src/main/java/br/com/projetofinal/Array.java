@@ -5,10 +5,8 @@ import br.com.projetofinal.repository.ConnectionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 import static java.lang.Math.toIntExact;
 
 public class Array {
@@ -18,7 +16,7 @@ public class Array {
     public static final int INF=Integer.MAX_VALUE;
 
     /*Contrutor seta toda a entidade Connections no List*/
-    public Array(ConnectionsRepository connections) {
+    public Array(ConnectionsRepository connections)  {
 
         /*No construtor eu pego as conexões no banco e jogo na connectionList*/
         List<Connections> list = new ArrayList<>();
@@ -33,6 +31,8 @@ public class Array {
                 list.add( (Connections) c);
             }
         }
+
+        Collections.sort(list);
 
         this.connectionsList = list;
     }
