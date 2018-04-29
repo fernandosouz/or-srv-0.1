@@ -8,12 +8,32 @@ import java.util.List;
 public class Connections  extends  AbstractEntity implements Comparable<Connections>{
     String connections;
 
+    Integer x;
+
+    Integer y;
+
     public String getConnections() {
         return connections;
     }
 
     public void setConnections(String connections) {
         this.connections = connections;
+    }
+
+    public Integer getX() {
+        return x;
+    }
+
+    public void setX(Integer x) {
+        this.x = x;
+    }
+
+    public Integer getY() {
+        return y;
+    }
+
+    public void setY(Integer y) {
+        this.y = y;
     }
 
     public List<Connections> findAllByIdOrOrderBy(){
